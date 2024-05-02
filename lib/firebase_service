@@ -13,13 +13,13 @@ class FirebaseService{
 
 // mengambil dan menampilkan data di firebase ke ui
   Stream<QuerySnapshot<Object?>> ambilData(){
-    return userRef.snapshots(); //snapshots akan mengambil seluruh data di collection
+    return userRef.snapshots(); 
     
   }
 
 //TAMBAH
   void tambah(UserData userData){
-    DocumentReference documentReference = userRef.doc(userData.nama); //nama doc diambil dari nama
+    DocumentReference documentReference = userRef.doc(userData.nama); 
     documentReference.set(userData.toJson());
   }
 
@@ -31,7 +31,7 @@ class FirebaseService{
 
 //UBAH
   void ubah(UserData userData){
-    DocumentReference documentReference = userRef.doc(userData.nama);//key nya nama
+    DocumentReference documentReference = userRef.doc(userData.nama);
     documentReference.update(userData.toJson());
   }
 }

@@ -12,7 +12,7 @@ class UserList extends StatefulWidget {
 }
 
 class _UserListState extends State<UserList> {
-  FirebaseService firebaseService = new FirebaseService(); //96-97
+  FirebaseService firebaseService = new FirebaseService();
 
   TextEditingController nama = TextEditingController();
 
@@ -33,7 +33,7 @@ class _UserListState extends State<UserList> {
   String btnSimpanText = "Simpan";
   String btnUbahText = "Ubah";
 
-  bool isReadOnly = false; // inisiasi untuk readonly
+  bool isReadOnly = false; 
 
   int selectedDaftarUserIndex = 0;
 
