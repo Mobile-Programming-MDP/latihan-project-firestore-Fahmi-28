@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterlist/firebase_service';
+import 'package:flutterlist/firebase_service.dart';
 import 'package:flutterlist/userdata.dart';
 import 'package:flutterlist/useritem.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -33,7 +33,7 @@ class _UserListState extends State<UserList> {
   String btnSimpanText = "Simpan";
   String btnUbahText = "Ubah";
 
-  bool isReadOnly = false; 
+  bool isReadOnly = false;
 
   int selectedDaftarUserIndex = 0;
 
