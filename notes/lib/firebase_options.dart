@@ -23,20 +23,11 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -65,4 +56,32 @@ class DefaultFirebaseOptions {
     projectId: 'notes-e8848',
     storageBucket: 'notes-e8848.appspot.com',
   );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyDhCCmI8-ZOvIssIzpAiPgOtixHY_8-mZI',
+    appId: '1:969833755379:ios:01446faaa227d22a4ebd86',
+    messagingSenderId: '969833755379',
+    projectId: 'notes-e8848',
+    storageBucket: 'notes-e8848.appspot.com',
+    iosBundleId: 'com.example.notes',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyDhCCmI8-ZOvIssIzpAiPgOtixHY_8-mZI',
+    appId: '1:969833755379:ios:01446faaa227d22a4ebd86',
+    messagingSenderId: '969833755379',
+    projectId: 'notes-e8848',
+    storageBucket: 'notes-e8848.appspot.com',
+    iosBundleId: 'com.example.notes',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyCfL2HQuxrE47ed9TgnYrMCAWdznMdjnQk',
+    appId: '1:969833755379:web:01469a434d9d37504ebd86',
+    messagingSenderId: '969833755379',
+    projectId: 'notes-e8848',
+    authDomain: 'notes-e8848.firebaseapp.com',
+    storageBucket: 'notes-e8848.appspot.com',
+  );
+
 }
