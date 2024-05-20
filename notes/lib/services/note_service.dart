@@ -15,7 +15,7 @@ class NoteService {
   static Future<String?> uploadImage(XFile file) async {
     try {
       String fileName = path.basename(file.path);
-      Reference ref = _storage.ref().child('images').child('/${fileName}');
+      Reference ref = _storage.ref().child('images').child('/$fileName');
       UploadTask uploadTask;
 
       if (kIsWeb) {

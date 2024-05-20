@@ -4,9 +4,8 @@ class LocationService {
   Future<Position> getCurrentLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
-
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (serviceEnabled) {
+    if (!serviceEnabled) {
       return Future.error("Location Service are disable");
     }
     permission = await Geolocator.checkPermission();

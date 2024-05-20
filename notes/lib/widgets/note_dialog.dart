@@ -8,7 +8,7 @@ import 'package:notes/services/note_service.dart';
 class NoteDialog extends StatefulWidget {
   final Note? note;
 
-  NoteDialog({super.key, this.note});
+  const NoteDialog({super.key, this.note});
 
   @override
   State<NoteDialog> createState() => _NoteDialogState();
@@ -22,7 +22,6 @@ class _NoteDialogState extends State<NoteDialog> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.note != null) {
       _titleController.text = widget.note!.title;
