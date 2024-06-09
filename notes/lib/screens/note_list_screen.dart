@@ -1,9 +1,6 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:notes/models/note.dart';
 import 'package:notes/screens/google_maps_screen.dart';
-import 'package:notes/screens/map_screen.dart';
 import 'package:notes/services/note_service.dart';
 import 'package:notes/widgets/note_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,24 +13,41 @@ class NoteListScreen extends StatefulWidget {
 }
 
 class _NoteListScreenState extends State<NoteListScreen> {
+  bool _isDarkMode = false;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notes'),
-      ),
-      body: const NoteList(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return const NoteDialog();
-            },
-          );
-        },
-        tooltip: 'Add Note',
-        child: const Icon(Icons.add),
+    return MaterialApp(
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Notes'),
+          actions: [
+            Switch(
+              value: _isDarkMode,
+              onChanged: (value) {
+                setState(() {
+                  _isDarkMode = value;
+                });
+              },
+            ),
+          ],
+        ),
+        body: const NoteList(),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return const NoteDialog();
+              },
+            );
+          },
+          tooltip: 'Add Note',
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
@@ -105,7 +119,6 @@ class NoteList extends StatelessWidget {
                                           ),
                                         ),
                                       );
-                                      //openMap(document.lat, document.lng);
                                     },
                                     child: const Padding(
                                       padding:
@@ -151,7 +164,6 @@ class NoteList extends StatelessWidget {
   }
 
   showAlertDialog(BuildContext context, Note document) {
-    // set up the buttons
     Widget cancelButton = ElevatedButton(
       child: const Text("No"),
       onPressed: () {
@@ -167,7 +179,6 @@ class NoteList extends StatelessWidget {
       },
     );
 
-    // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: const Text("Delete Note"),
       content: const Text("Are you sure to delete Note?"),
@@ -177,7 +188,6 @@ class NoteList extends StatelessWidget {
       ],
     );
 
-    // show the dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {

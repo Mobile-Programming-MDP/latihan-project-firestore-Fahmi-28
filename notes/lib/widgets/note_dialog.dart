@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:notes/models/note.dart';
 import 'package:notes/services/location_service.dart';
 import 'package:notes/services/note_service.dart';
+import 'package:share/share.dart';
 
 class NoteDialog extends StatefulWidget {
   final Note? note;
@@ -29,9 +30,8 @@ class _NoteDialogState extends State<NoteDialog> {
     }
   }
 
-  Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
     if (pickedFile != null) {
       setState(() {
         _imageFile = pickedFile;
@@ -44,6 +44,16 @@ class _NoteDialogState extends State<NoteDialog> {
     setState(() {
       _position = location;
     });
+  }
+
+  void _shareNote() {
+    final String text =
+        '${_titleController.text}\n${_descriptionController.text}';
+    if (_imageFile != null) {
+      Share.shareFiles([_imageFile!.path], text: text);
+    } else {
+      Share.share(text);
+    }
   }
 
   @override
@@ -87,9 +97,17 @@ class _NoteDialogState extends State<NoteDialog> {
                       )
                     : Container()),
           ),
-          TextButton(
-            onPressed: _pickImage,
-            child: const Text("Pick Image"),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () => _pickImage(ImageSource.gallery),
+                child: const Text("Pick Image from Gallery"),
+              ),
+              TextButton(
+                onPressed: () => _pickImage(ImageSource.camera),
+                child: const Text("Capture Image with Camera"),
+              ),
+            ],
           ),
           TextButton(
             onPressed: _getLocation,
@@ -100,7 +118,7 @@ class _NoteDialogState extends State<NoteDialog> {
                 ? 'Current Position : ${_position!.latitude.toString()}, ${_position!.longitude.toString()}'
                 : 'Current Position : ${widget.note?.lat}, ${widget.note?.lng}',
             textAlign: TextAlign.start,
-          )
+          ),
         ],
       ),
       actions: [
@@ -112,6 +130,10 @@ class _NoteDialogState extends State<NoteDialog> {
             },
             child: const Text('Cancel'),
           ),
+        ),
+        TextButton(
+          onPressed: _shareNote,
+          child: const Text('Share'),
         ),
         ElevatedButton(
           onPressed: () async {
@@ -127,13 +149,12 @@ class _NoteDialogState extends State<NoteDialog> {
               title: _titleController.text,
               description: _descriptionController.text,
               imageUrl: imageUrl,
-              lat: widget.note?.lat.toString() != _position!.latitude.toString()
+              lat: _position != null
                   ? _position!.latitude.toString()
                   : widget.note?.lat.toString(),
-              lng:
-                  widget.note?.lng.toString() != _position!.longitude.toString()
-                      ? _position!.longitude.toString()
-                      : widget.note?.lng.toString(),
+              lng: _position != null
+                  ? _position!.longitude.toString()
+                  : widget.note?.lng.toString(),
               createdAt: widget.note?.createdAt,
             );
 
@@ -142,8 +163,9 @@ class _NoteDialogState extends State<NoteDialog> {
                 Navigator.of(context).pop();
               });
             } else {
-              NoteService.updateNote(note)
-                  .whenComplete(() => Navigator.of(context).pop());
+              NoteService.updateNote(note).whenComplete(() {
+                Navigator.of(context).pop();
+              });
             }
           },
           child: Text(widget.note == null ? 'Add' : 'Update'),
