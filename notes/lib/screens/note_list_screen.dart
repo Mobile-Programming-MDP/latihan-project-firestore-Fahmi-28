@@ -3,6 +3,7 @@ import 'package:notes/models/note.dart';
 import 'package:notes/screens/google_maps_screen.dart';
 import 'package:notes/services/note_service.dart';
 import 'package:notes/widgets/note_dialog.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NoteListScreen extends StatefulWidget {
@@ -53,16 +54,21 @@ class _NoteListScreenState extends State<NoteListScreen> {
   }
 }
 
-class NoteList extends StatelessWidget {
+class NoteList extends StatefulWidget {
   const NoteList({super.key});
 
+  @override
+  State<NoteList> createState() => _NoteListState();
+}
+
+class _NoteListState extends State<NoteList> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: NoteService.getNoteList(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return Center(child: Text('Error: ${snapshot.error}'));
         }
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
@@ -142,6 +148,15 @@ class NoteList extends StatelessWidget {
                                 child: Icon(Icons.delete),
                               ),
                             ),
+                            InkWell(
+                              onTap: () {
+                                _shareNote(document);
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 10),
+                                child: Icon(Icons.share),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -155,15 +170,24 @@ class NoteList extends StatelessWidget {
     );
   }
 
+  void _shareNote(Note note) {
+    final String text = '${note.title}\n${note.description}';
+    if (note.imageUrl != null && Uri.parse(note.imageUrl!).isAbsolute) {
+      Share.share('$text\nImage: ${note.imageUrl}');
+    } else {
+      Share.share(text);
+    }
+  }
+
   Future<void> openMap(String? lat, String? lng) async {
     Uri uri =
-        Uri.parse("https://www.google.com/maps/search/?api=1&query=$lat, $lng");
+        Uri.parse("https://www.google.com/maps/search/?api=1&query=$lat,$lng");
     if (!await launchUrl(uri)) {
       throw Exception('Could not launch $uri');
     }
   }
 
-  showAlertDialog(BuildContext context, Note document) {
+  void showAlertDialog(BuildContext context, Note document) {
     Widget cancelButton = ElevatedButton(
       child: const Text("No"),
       onPressed: () {
@@ -172,10 +196,10 @@ class NoteList extends StatelessWidget {
     );
     Widget continueButton = ElevatedButton(
       child: const Text("Yes"),
-      onPressed: () {
-        NoteService.deleteNote(document).whenComplete(() {
-          Navigator.of(context).pop();
-        });
+      onPressed: () async {
+        Navigator.of(context).pop(); // Close the dialog before deleting
+        await NoteService.deleteNote(document);
+        setState(() {}); // Trigger a rebuild
       },
     );
 

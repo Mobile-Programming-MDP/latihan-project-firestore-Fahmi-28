@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -24,11 +23,12 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
   void initState() {
     super.initState();
     _cameraPosition = CameraPosition(
-        target: LatLng(
-          double.parse(widget.lat.toString()),
-          double.parse(widget.lng.toString()),
-        ),
-        zoom: 15);
+      target: LatLng(
+        double.parse(widget.lat.toString()),
+        double.parse(widget.lng.toString()),
+      ),
+      zoom: 15,
+    );
     _markers = {};
     _markerId = MarkerId(widget.lat.toString() + widget.lng.toString());
     _markers.add(
@@ -39,7 +39,7 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
           double.parse(widget.lng.toString()),
         ),
         infoWindow: const InfoWindow(
-          title: 'Your Location',
+          title: 'Your location',
           snippet: '...',
         ),
       ),
@@ -67,7 +67,7 @@ class _GoogleMapsScreenState extends State<GoogleMapsScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _goToLocation,
-        label: const Text("To your Location"),
+        label: const Text("To your location"),
         icon: const Icon(Icons.directions_car),
       ),
     );
